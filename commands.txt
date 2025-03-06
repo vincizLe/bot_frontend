@@ -1,0 +1,7 @@
+General commands
+- ./npm.bat (this command allow to access to the nodejs cmd)
+- ./npm.bat install -g @angular/cli
+
+Command to create the project
+- ./ng.bat new bot_frontend --skip-install 
+- ./npm.bat install
