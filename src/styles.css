@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background-color: #f5f7fb;
+  font-family: 'Arial', sans-serif;
+  color: #202123;
+  margin: 0;
+}
+
+button.full-width {
+  transition: background-color 0.3s ease;
+}
+
+button.full-width:hover {
+  background-color: #ffeb3b !important; /* This is Material Yellow 300 */
+  color: #202123;
+}
