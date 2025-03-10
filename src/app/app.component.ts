@@ -3,13 +3,19 @@ import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
-    imports: [RouterOutlet, MatToolbarModule, MatButtonModule]
+    imports: [
+        RouterOutlet, 
+        MatToolbarModule, 
+        MatButtonModule,
+        NgIf
+    ]
 })
 export class AppComponent {
     constructor(public router: Router) {}

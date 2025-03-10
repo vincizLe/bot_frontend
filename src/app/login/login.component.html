@@ -12,6 +12,8 @@
                 <input matInput class="input-box" type="password" [(ngModel)]="password" name="password" required>
             </mat-form-field>
 
+            <div *ngIf="errorMessage" class="error-message">{{errorMessage}}</div>
+
             <button mat-raised-button color="primary" type="submit" class="full-width" [disabled]="!loginForm.valid">Login</button>
         </form>
     </mat-card>
