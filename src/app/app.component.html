@@ -1,9 +1,9 @@
 <mat-toolbar *ngIf="router.url !== '/login'" color="primary" class="nav-toolbar">
   <span class="logo">Moodys Bot</span>
   <span class="spacer"></span>
-  <a mat-button class="nav-item" routerLink="/chatbot">ChatBot</a>
-  <a mat-button class="nav-item" routerLink="/metrics">Metrics</a>
-  <a mat-button class="nav-item" routerLink="/logout">Log Out</a>
+  <a mat-button class="nav-item" routerLink="/chatbot" (click)="goToChatbot()">ChatBot</a>
+  <a mat-button class="nav-item" routerLink="/metrics"(click)="goToMetrics()">Metrics</a>
+  <a mat-button class="nav-item" routerLink="/login" (click)="goToLogout()">Log Out</a>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

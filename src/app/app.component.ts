@@ -19,5 +19,24 @@ import { NgIf } from '@angular/common';
 })
 export class AppComponent {
     constructor(public router: Router) {}
+
+    goToChatbot() {
+        this.router.navigate(['/chatbot']);
+    }
+
+    goToMetrics() {
+        this.router.navigate(['/metrics']);
+    }
+
+    goToLogout() {
+        // Clear session storage or local storage if needed
+        localStorage.removeItem('userId');
+        sessionStorage.clear();
+    
+        // Redirect to login and force reload
+        this.router.navigate(['/login']).then(() => {
+          window.location.reload();
+        });
+    }
 }
 

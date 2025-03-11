@@ -3,7 +3,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { ChatBotService } from '../services/chatbot.service';
 
@@ -21,29 +20,29 @@ import { ChatBotService } from '../services/chatbot.service';
 })
 export class ChatBotComponent {
   messages: { sender: string, text: string }[] = [];
-  userMessage: string = '';
+  question: string = '';
 
   
   constructor(private chatBotService: ChatBotService) {}
 
 
   sendMessage() {
-    if (this.userMessage.trim()) {
-      this.messages.push({ sender: 'user', text: this.userMessage });
+    if (this.question.trim()) {
+      this.messages.push({ sender: 'user', text: this.question });
       setTimeout(() => {
         this.messages.push({ sender: 'bot', text: 'I am a simple bot. How can I help? ' });
       }, 1000);
-      this.userMessage = '';
+      this.question = '';
     }
   }
 
   sendMessage1() {
-    if (this.userMessage.trim()) {
+    if (this.question.trim()) {
       // Add user message
-      this.messages.push({ sender: 'user', text: this.userMessage });
+      this.messages.push({ sender: 'user', text: this.question });
 
       // Call the API to get bot's response
-      this.chatBotService.createQuery(this.userMessage).subscribe({
+      this.chatBotService.createQuery(this.question).subscribe({
         next: (result) => {
           this.messages.push({ sender: 'bot', text: result.response });
         },
@@ -56,8 +55,8 @@ export class ChatBotComponent {
         }
       });
 
-      // Clear user message input
-      this.userMessage = '';
+      // Clear user question input
+      this.question = '';
     }
   }
 }
