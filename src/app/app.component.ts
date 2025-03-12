@@ -21,11 +21,15 @@ export class AppComponent {
     constructor(public router: Router) {}
 
     goToChatbot() {
-        this.router.navigate(['/chatbot']);
+        this.router.navigate(['/chatbot']).then(() => {
+            window.location.reload();
+          });
     }
 
     goToMetrics() {
-        this.router.navigate(['/metrics']);
+        this.router.navigate(['/metrics']).then(() => {
+            window.location.reload();
+        });
     }
 
     goToLogout() {

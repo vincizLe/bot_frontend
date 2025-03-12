@@ -1,0 +1,47 @@
+<div class="metrics-container">
+    <div class="form-container">
+      <div class="column-1">
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" [formControl]="selectedDate" (dateChange)="updateChartData()">
+          <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+  
+      <div class="column-2">
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Usuario</mat-label>
+            <mat-select [formControl]="selectedUser" (selectionChange)="updateChartData()">
+              <mat-option *ngFor="let user of users" [value]="user">{{ user }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Rango</mat-label>
+            <mat-select [formControl]="selectedRange" (selectionChange)="updateChartData()">
+              <mat-option value="día">Día</mat-option>
+              <mat-option value="semana">Semana</mat-option>
+              <mat-option value="mes">Mes</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+  
+        <div class="row chart-container">
+          <ngx-charts-bar-vertical
+            [results]="tokenData"
+            [scheme]="'vivid'"
+            [xAxis]="true"
+            [yAxis]="true"
+            [legend]="false"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+            xAxisLabel="Fecha"
+            yAxisLabel="Tokens Consumidos">
+          </ngx-charts-bar-vertical>
+        </div>
+      </div>
+    </div>
+  </div>
+  
