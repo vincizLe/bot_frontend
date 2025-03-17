@@ -1,68 +1,36 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { format, subDays, subWeeks, subMonths } from 'date-fns';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { NgFor } from '@angular/common';
+import { Component } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-metrics',
   imports:[
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    NgxChartsModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    MatNativeDateModule
+    MatCardModule,
+    NgFor
   ],
   templateUrl: './metrics.component.html',
-  styleUrls: ['./metrics.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./metrics.component.css']
 })
 export class MetricsComponent {
-  currentDate = new Date();
+  constructor(private router: Router) {}
 
-  users = ['Usuario1', 'Usuario2', 'Usuario3'];
-  selectedUser = new FormControl(this.users[0]);
-  selectedDate = new FormControl(this.currentDate);
-  selectedRange = new FormControl('día');
-
-  tokenData: any[] = [];
-
-  constructor() {
-    this.updateChartData();
-  }
-
-  updateChartData() {
-    const date = this.selectedDate.value??this.currentDate;
-    const range = this.selectedRange.value;
-    
-    let startDate;
-    if (range === 'día') {
-      startDate = subDays(date, 0);
-    } else if (range === 'semana') {
-      startDate = subWeeks(date, 1);
-      startDate = subDays(startDate, -1);
-    } else {
-      startDate = subMonths(date, 1);
-      startDate = subDays(startDate, -1);
+  metrics = [
+    {
+      title: 'Tokens consumidos',
+      description: 'Este gráfico representa los tokens consumidos por un usuario en una determinada fecha.',
+      image: 'https://cdnwebsite.databox.com/wp-content/uploads/2019/05/22115536/website-kpis.png',
+      route: '/metrics/metric-01'
+    },
+    {
+      title: 'Consultas',
+      description: 'Esta lista muestra las consultas realizadas por el chatbot.',
+      image: 'https://cdnwebsite.databox.com/wp-content/uploads/2019/05/22115536/website-kpis.png',
+      route: '/metrics/metric-02'
     }
+  ];
 
-    this.tokenData = [];
-    let temporalDate = startDate;
-    while (temporalDate <= date) {
-      this.tokenData.push({
-        name: format(temporalDate, 'yyyy-MM-dd'),
-        value: Math.floor(Math.random() * 1000)
-      });
-      temporalDate = subDays(temporalDate, -1);
-    }
+  navigateTo(route: string) {
+    this.router.navigate([route]);
   }
-}
+} 

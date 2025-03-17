@@ -1,0 +1,47 @@
+.metrics-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+  }
+  
+  .form-container {
+    width: 95%;
+    display: flex;
+    gap: 20px;
+  }
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: #fff;
+    padding: 0 10px !important;
+}
+  
+  .column-1 {
+    width: 225px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  ::ng-deep .mat-calendar {
+    width: 240px !important;
+  }
+
+  .column-2 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  ::ng-deep .cdk-overlay-pane {
+    background-color: #fff !important;
+  }
+  
+  .row {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .chart-container {
+    width: 100%;
+    height: 300px;
+  }
