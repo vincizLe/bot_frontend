@@ -4,6 +4,7 @@ import { ChatBotComponent } from './chatbot/chatbot.component';
 import { MetricsComponent } from './metrics/metrics.component';
 import { Metric01Component } from './metrics/metric_01/metric01.component';
 import { Metric02Component } from './metrics/metric_02/metric02.component';
+import { Metric03Component } from './metrics/metric_03/metric03.component';
 
 
 export const routes: Routes = [
@@ -12,5 +13,6 @@ export const routes: Routes = [
     { path: 'metrics', component: MetricsComponent },
     { path: 'metrics/metric-01', component: Metric01Component },
     { path: 'metrics/metric-02', component: Metric02Component },
+    { path: 'metrics/metric-03', component: Metric03Component },
     { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

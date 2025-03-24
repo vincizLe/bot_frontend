@@ -27,6 +27,12 @@ export class MetricsComponent {
       description: 'Esta lista muestra las consultas realizadas por el chatbot.',
       image: 'https://cdnwebsite.databox.com/wp-content/uploads/2019/05/22115536/website-kpis.png',
       route: '/metrics/metric-02'
+    },
+    {
+      title: 'MoodBot vs ChatGPT',
+      description: 'Este gráfico muestra la cantidad de preguntas resueltas por Moodbot y ChatGPT',
+      image: 'https://cdnwebsite.databox.com/wp-content/uploads/2019/05/22115536/website-kpis.png',
+      route: '/metrics/metric-03'
     }
   ];
 
