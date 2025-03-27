@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { format, subDays, subWeeks, subMonths } from 'date-fns';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,7 +36,14 @@ export class Metric03Component {
 
   queriesSerie: any[] = [];
 
-  colorScheme = {
+  //colorScheme = {
+  //  domain: ['#004cba', '#ba0001']
+  //};
+
+  colorScheme: Color = {
+    name: 'customScheme',
+    selectable: true,
+    group: ScaleType.Ordinal,
     domain: ['#004cba', '#ba0001']
   };
 

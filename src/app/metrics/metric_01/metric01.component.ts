@@ -10,6 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MetricsService } from '../../services/metrics.service';
 import { UserService } from '../../services/user.service';
+import { User } from '../../domain/models';
 
 @Component({
   selector: 'app-metric-01',
@@ -32,7 +33,7 @@ import { UserService } from '../../services/user.service';
 export class Metric01Component {
   userId:number
   currentDate:Date
-  users:Array<{ id: number,username:string,password:string,createdAt:Date,updatedAt:Date }>
+  users:Array<User>
   selectedUser:FormControl 
   selectedDate:FormControl 
   selectedRange:FormControl 
@@ -55,7 +56,6 @@ export class Metric01Component {
   updateChartData() {
     const endDate = this.selectedDate.value??this.currentDate;
     const range = this.selectedRange.value;
-    //const ids:Array<number> = this.usersId.length > 0 ? this.usersId : this.selectedUser.value ?? []
 
     let startDate;
     if (range === 'día') {
@@ -74,7 +74,7 @@ export class Metric01Component {
     this.metricsService.countQueriesPerDateAndUsers(selectedUserids,startDate.toISOString().split('T')[0],endDate.toISOString().split('T')[0]).subscribe({
       next: (metricData) =>{
         this.data = [...metricData]
-        console.log(this.data)
+        console.log("Data: ",this.data)
         this.cdr.markForCheck();
       },
       error: (error) => {
@@ -139,10 +139,9 @@ export class Metric01Component {
         series: serie
       });
       temporalDate = subDays(temporalDate, -1);
-
-      
     }
-    console.log("function -> ",this.data)
+
+    console.log("Data: ",this.data)
     this.cdr.markForCheck();
   }
 
