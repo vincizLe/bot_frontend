@@ -1,6 +1,6 @@
 import { Author } from "./enums"
 
-export class user {
+export class Query {
     id: number 
     question: string 
     response: string 
@@ -8,11 +8,11 @@ export class user {
     outputTokens: number 
     totalTokens: number
     author: Author
-    userId: Number
+    userId: number
     createdAt: Date
     updatedAt: Date
 
-    constructor(user:user){
+    constructor(user:Query){
         this.id = user.id;
         this.question = user.question;
         this.response = user.response;

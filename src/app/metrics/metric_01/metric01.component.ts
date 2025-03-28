@@ -53,7 +53,7 @@ export class Metric01Component {
     this.loadUsers();
   }
 
-  updateChartData() {
+  updateChartData():void {
     const endDate = this.selectedDate.value??this.currentDate;
     const range = this.selectedRange.value;
 
@@ -107,7 +107,7 @@ export class Metric01Component {
   }
 
 
-  updateChartData1() {
+  updateChartData1():void {
     const date = this.selectedDate.value??this.currentDate;
     const range = this.selectedRange.value;
     

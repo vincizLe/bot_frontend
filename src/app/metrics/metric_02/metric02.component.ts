@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component} from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
+import {  FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,14 +7,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MetricsService } from '../../services/metrics.service';
+import { Author } from '../../domain/enums';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { UserService } from '../../services/user.service';
+import { User } from '../../domain/models';
 
-
-export interface Data {
+interface Data{
   question: string;
   response: string;
   user: string;
+  author:Author
   token: number;
   datetime: Date;
 }
@@ -31,7 +36,8 @@ export interface Data {
     MatSelectModule,
     ReactiveFormsModule,
     MatNativeDateModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ],
   templateUrl: './metric02.component.html',
   styleUrls: ['./metric02.component.css'],
@@ -39,36 +45,108 @@ export interface Data {
 })
 
 export class Metric02Component {
-  displayedColumns: string[] = ['question', 'response', 'user', 'token', 'datetime'];
-  dataSource: Data[] = [
-    { question: 'What is Angular?', response: 'A framework', user: 'John', token: 1, datetime: new Date() },
-    { question: 'What is TypeScript?', response: 'A superset of JavaScript', user: 'Jane', token: 2, datetime: new Date() },
-    { question: 'What is RxJS?', response: 'A library for reactive programming', user: 'Alice', token: 3, datetime: new Date() },
-    { question: 'What is Node.js?', response: 'A JavaScript runtime', user: 'Bob', token: 4, datetime: new Date() }
-  ];
+  displayedColumns: string[];
+  userId:number;
+  users: User[];
+  userDict:{[key:number]:User}
+  data: Array<Data>;
+  dataSource:MatTableDataSource<Data>;
+  selectedUser: FormControl ;
+  selectedStartDate: Date | null ;
+  selectedEndDate: Date | null;
 
-  users: string[] = ['John', 'Jane', 'Alice', 'Bob'];
-  selectedUser: string = '';
-  startDate: Date | null = null;
-  endDate: Date | null = null;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;  
+
+  constructor(private userService:UserService,private metricsService:MetricsService,private cdr: ChangeDetectorRef) {
+    this.displayedColumns= ['question', 'response', 'user', 'token', 'datetime'];
+    this.userId = Number(localStorage.getItem('userId'));
+    this.users = [] ;
+    this.userDict = {}
+    this.data = [];
+    this.dataSource = new MatTableDataSource<Data>([]);
+    this.selectedUser = new FormControl();
+    this.selectedStartDate = null;
+    this.selectedEndDate = null;
+  }
+
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
 
   onStartDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.startDate = event.value;  
+    this.selectedStartDate = event.value;  
+    this.loadQueries()
   }
 
   onEndDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.endDate = event.value; 
+    this.selectedEndDate = event.value; 
+    this.loadQueries()
   }
 
+  loadUsers(): void {
+    this.userService.getUsers().subscribe({
+      next: (result) => {
 
-  filteredData(): Data[] {
-    const test = this.endDate??new Date()
-    
-    return this.dataSource.filter(item => {
+        for(const user of result as User[]){
+          this.users.push({ 
+            id: user.id, 
+            username: user.username,
+            password:user.password,
+            createdAt:user.createdAt,
+            updatedAt:user.updatedAt
+          })
 
-      const isDateInRange = (!this.startDate || item.datetime >= this.startDate) && (!this.endDate || item.datetime <= this.endDate);
-      const isUserMatch = !this.selectedUser || item.user === this.selectedUser;
-      return isDateInRange && isUserMatch;
+          this.userDict[user.id] = user
+        }
+
+        this.loadQueries()
+      },
+      error: (error) => console.error('Error fetching users:', error)
+    });
+  }
+
+  loadQueries():void{
+    let startDate = undefined
+    let endDate = undefined
+
+    if (this.selectedStartDate != null){
+      startDate = this.selectedStartDate.toISOString().split('T')[0]
+    }
+
+    if(this.selectedEndDate != null){
+      endDate = this.selectedEndDate.toISOString().split('T')[0]
+    }
+
+    let ids:number[] = []
+
+    if (this.selectedUser.value != null){
+      ids.push(this.selectedUser.value)
+    }
+
+    if(startDate == null){
+      startDate = undefined
+    }
+
+    this.metricsService.listQueries(ids,startDate,endDate).subscribe({
+      next: (queries) => {
+        this.data = queries.map(query => ({
+          question:query.question,
+          response:query.response,
+          user:this.userDict[(query.userId == 0 ?1:query.userId)].username,
+          author:query.author,
+          token:query.totalTokens,
+          datetime:query.createdAt}))
+
+        this.dataSource.data = this.data
+        this.cdr.markForCheck()
+        
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+        });
+          
+      },
+      error: (error) => console.error('Error fetching queries:', error)
     });
   }
 }
